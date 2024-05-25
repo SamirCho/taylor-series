@@ -4,70 +4,51 @@ function display(){
     bigString=""
     document.getElementById("container").innerHTML=""
     f=document.getElementById("function").value
-    if(f=="ln(x)"){
-        f="log(x)"
-    }
-    if(f=="arcsin(x)"){
-        f="asin(x)"
-    }
-    if(f=="arccos(x)"){
-        f="acos(x)"
-    }
-    if(f=="arctan(x)"){
-        f="atan(x)"
-    }
-    if(f=="arccsc(x)"){
-        f="acsc(x)"
-    }
-    if(f=="arcsec(x)"){
-        f="asec(x)"
-    }
-    if(f=="arccot(x)"){
-        f="acot(x)"
-    }
-    altf=f
-    if(f=="log(x)"){
-        altf="ln(x)"
-    }
-    if(f=="asin(x)"){
-        altf="arcsin(x)"
-    }
-    if(f=="acos(x)"){
-        altf="arccos(x)"
-    }
-    if(f=="atan(x)"){
-        altf="arctan(x)"
-    }
-    if(f=="acsc(x)"){
-        altf="arccsc(x)"
-    }
-    if(f=="asec(x)"){
-        altf="arcsec(x)"
-    }
-    if(f=="acot(x)"){
-        altf="arccot(x)"
-    }
-    altf=altf.split("")
-    for (let i = 0; i < altf.length; i++) {
-        if(altf[i]=="^"){
-            altf[i]="<sup>"
-            altf[i+1]+="</sup>"
+    f=f.split("/")
+    if(f.length==2&&Math.floor(f[0])==f[0]&&Math.floor(f[1])==f[1]){
+        document.getElementById("container").innerHTML=f.join("/")+" ≈ "+reduce(f[0],f[1])
+    }else{
+        f=f.join("/")
+        if(f=="ln(x)"){
+            f="log(x)"
         }
-        if(altf[i]=="l"&&altf[i+1]=="o"&&altf[i+2]=="g"){
-            altf[i+1]="n"
-            altf.splice(i+2,1)
+        if(f=="arcsin(x)"){
+            f="asin(x)"
         }
-    }
-    altf=altf.join("")
-    c=parseFloat(document.getElementById("center").value)
-    numTerms=parseFloat(document.getElementById("degree").value)+1
-    for (let i = 0; i < numTerms; i++) {
-        if(taylor(f,i).coef!=0){
-            bigString+=taylor(f,i).expr
-            bigString+="+"
+        if(f=="arccos(x)"){
+            f="acos(x)"
         }
+        if(f=="arctan(x)"){
+            f="atan(x)"
+        }
+        if(f=="arccsc(x)"){
+            f="acsc(x)"
+        }
+        if(f=="arcsec(x)"){
+            f="asec(x)"
+        }
+        if(f=="arccot(x)"){
+            f="acot(x)"
+        }
+        altf=f
+        altf=altf.split("")
+        for (let i = 0; i < altf.length; i++) {
+            if(altf[i]=="^"){
+                altf[i]="<sup>"
+                altf[i+1]+="</sup>"
+            }
+        }
+        altf=altf.join("")
+        c=parseFloat(document.getElementById("center").value)
+        numTerms=parseFloat(document.getElementById("degree").value)+1
+        for (let i = 0; i < numTerms; i++) {
+            if(taylor(f,i).coef!=0){
+                bigString+=taylor(f,i).expr
+                bigString+="+"
+            }
+        }
+        document.getElementById("container").innerHTML=cleanup2(cleanup(altf))+" ≈ "+reduce(cleanup2(cleanup(bigString)),1)
     }
-    document.getElementById("container").innerHTML=cleanup2(cleanup(altf))+" ≈ "+reduce(cleanup2(cleanup(bigString)),1)
 }
 
 function cleanup(str){
@@ -156,12 +137,12 @@ function taylor(f,n){
     if(n==0){
         return{
             coef:math.evaluate(f,{x:c}),
-            expr:reduce(math.evaluate(f,{x:c}),1)
+            expr:math.evaluate(f,{x:c})
         }
     }else if(n==1){
         return{
             coef:evalDiff(f),
-            expr:cleanup(reduce(evalDiff(f),1)+"(x-"+c+")")
+            expr:cleanup(evalDiff(f)+"(x-"+c+")")
         }
     }else{
         for (let i = 0; i < n-1; i++) {
@@ -188,9 +169,9 @@ function reduce(numerator,denominator){
     if(numerator<0){
         return "-"+reduce(-numerator,denominator)
     }
-    var gcd = function gcd(a,b){//stole this from stack overflow lol
-      return b ? gcd(b, a%b) : a;
-    };
+    let gcd = function gcd(a,b){//stole this from stack overflow lol
+      return b ? gcd(b, a%b) : a
+    }
     gcd = gcd(numerator,denominator);
     return numerator/gcd+"/"+denominator/gcd
 }
