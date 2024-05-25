@@ -67,12 +67,12 @@ function display(){
             bigString+="+"
         }
     }
-    document.getElementById("container").innerHTML=cleanup2(cleanup(altf))+" ≈ "+cleanup2(cleanup(bigString))
+    document.getElementById("container").innerHTML=cleanup2(cleanup(altf))+" ≈ "+reduce(cleanup2(cleanup(bigString)),1)
 }
 
 function cleanup(str){
     str=str.split("")
-    if(str.length!=1&&str[0]==1&&str[1]!="/"&&str[1]!="."){
+    if(str.length!=1&&str[0]==1&&str[1]!="/"&&str[1]!="."&&isNaN(str[1])){
         str.splice(0,1)
     }
     for (let i = 0; i < str.length; i++) {
@@ -182,6 +182,9 @@ function factorial(x){
 }
 
 function reduce(numerator,denominator){
+    if(isNaN(numerator)){
+        return numerator
+    }
     if(numerator<0){
         return "-"+reduce(-numerator,denominator)
     }
