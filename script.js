@@ -3,7 +3,8 @@ let f,c,numTerms,bigString
 function display(){
     bigString=""
     document.getElementById("container").innerHTML=""
-    f=document.getElementById("function").value.toString()
+    f=document.getElementById("function").value
+    
     c=parseFloat(document.getElementById("center").value)
     numTerms=parseFloat(document.getElementById("degree").value)+1
     for (let i = 0; i < numTerms; i++) {
@@ -13,6 +14,10 @@ function display(){
         }
     }
     document.getElementById("container").innerHTML=f+" ≈ "+cleanup2(bigString)
+}
+
+function alt(){
+    
 }
 
 function cleanup2(str){
@@ -33,7 +38,7 @@ function cleanup2(str){
         if(str[i]=="-"&&str[i+1]=="+"){
             str.splice(i+1,1)
         }
-        if(str[i]==1&&str[i+1]=="/"&&str[i+2]==1){
+        if(str[i]==1&&str[i+1]=="/"&&str[i+2]==1&&str[i+3]=="x"){
             str.splice(i,3)
         }
     }
@@ -76,7 +81,7 @@ function taylor(f,n){
         for (let i = 0; i < n-1; i++) {
             f=diff(f)
         }
-
+        console.log(evalDiff(f)/factorial(n))
         return{
             coef:evalDiff(f)/factorial(n)
             ,expr:cleanup(reduce(evalDiff(f),factorial(n))+"(x-"+c+")<sup>"+n+"</sup>")

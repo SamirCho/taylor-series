@@ -5,7 +5,7 @@ body{
     margin-left: 1%;
 }
 div{
-    font-size: 50px;
+    font-size: 30px;
 }
 button:hover{
     filter: drop-shadow(0 0 2em #646cffaa);
@@ -32,4 +32,7 @@ h1{
 }
 h2{
     font-size: large;
+}
+#container{
+    font-size: 40px;
 }

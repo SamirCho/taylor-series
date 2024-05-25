@@ -5,23 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taylor Series</title>
     <script src="https://unpkg.com/mathjs@12.4.2/lib/browser/math.js"></script>
-    <script defer src="taylor.js"></script>
+    <script defer src="script.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Taylor Series</h1>
+    <div>
     function:
     <input type="text" id="function" value="1/(1-x)" style="width:400px">
     <br>
     <br>
-    centered on:
+    centered at:
     <input type="text" id="center" value="0">
     <br>
     <br>
     degree:
     <input type="text" id="degree" value="5">
+    <br>
     <div id="container">1/(1-x) ≈ 1 + x + x<sup>2</sup> + x<sup>3</sup> + x<sup>4</sup> + x<sup>5</sup></div>
     <br>
     <button onclick="display()">Sumbit</button>
+    </div>
 </body>
 </html>
