@@ -3,13 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quadratic Factoring</title>
-    <script type="module" src="taylor.js" defer></script>
-    <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
+    <title>Taylor Series</title>
+    <script src="https://unpkg.com/mathjs@12.4.2/lib/browser/math.js"></script>
+    <script defer src="taylor.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Taylor Series</h1>
-    <div id="container"></div>
+    function:
+    <input type="text" id="function" value="1/(1-x)" style="width:400px">
+    <br>
+    <br>
+    centered on:
+    <input type="text" id="center" value="0">
+    <br>
+    <br>
+    degree:
+    <input type="text" id="degree" value="5">
+    <div id="container">1/(1-x) ≈ 1 + x + x<sup>2</sup> + x<sup>3</sup> + x<sup>4</sup> + x<sup>5</sup></div>
+    <br>
+    <button onclick="display()">Sumbit</button>
 </body>
 </html>

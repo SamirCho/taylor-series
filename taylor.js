@@ -1,9 +1,57 @@
-// import {create, all} from 'mathjs'
-// const config = { }
-// const math = create(all, config)
+let f,c,numTerms,bigString
 
-let f='asin(x)'
-let c=0
+function display(){
+    bigString=""
+    document.getElementById("container").innerHTML=""
+    f=document.getElementById("function").value.toString()
+    c=parseFloat(document.getElementById("center").value)
+    numTerms=parseFloat(document.getElementById("degree").value)+1
+    for (let i = 0; i < numTerms; i++) {
+        if(taylor(f,i).coef!=0){
+            bigString+=taylor(f,i).expr
+            bigString+="+"
+        }
+    }
+    document.getElementById("container").innerHTML=f+" ≈ "+cleanup2(bigString)
+}
+
+function cleanup2(str){
+    str=str.split("")
+    if(str[0]=="+"){
+        str.splice(0,1)
+    }
+    if(str[str.length-1]=="+"){
+        str.splice(str.length-1,1)
+    }
+    for (let i = 0; i < str.length; i++) {
+        if(str[i]=="+"&&str[i+1]=="+"){
+            str.splice(i,1)
+        }
+        if(str[i]=="+"&&str[i+1]=="-"){
+            str.splice(i,1)
+        }
+        if(str[i]=="-"&&str[i+1]=="+"){
+            str.splice(i+1,1)
+        }
+        if(str[i]==1&&str[i+1]=="/"&&str[i+2]==1){
+            str.splice(i,3)
+        }
+    }
+    return spacing(str.join(""))
+}
+
+function spacing(str){
+    str=str.split("")
+    for (let i = 0; i < str.length; i++) {
+        if(str[i]=="+"){
+            str[i]=" + "
+        }
+        if(str[i]=="-"){
+            str[i]=" - "
+        }
+    }
+    return str.join("")
+}
 
 function diff(f){
     return math.derivative(f.toString(),'x').toString()
@@ -28,18 +76,12 @@ function taylor(f,n){
         for (let i = 0; i < n-1; i++) {
             f=diff(f)
         }
+
         return{
             coef:evalDiff(f)/factorial(n)
-            ,expr:cleanup(frac(evalDiff(f),factorial(n))+"(x-"+c+")^"+n)
+            ,expr:cleanup(reduce(evalDiff(f),factorial(n))+"(x-"+c+")<sup>"+n+"</sup>")
         }
     }
-}
-
-console.log("cat")
-document.getElementById('container').innerHTML="\[ \int_{0}^{\pi} \sin(x) \, dx = 2 \]"
-for (let i = 0; i < 10; i++) {
-    if(taylor(f,i).coef!=0)
-    console.log(taylor(f,i).expr)
 }
 
 function factorial(x){
@@ -70,44 +112,13 @@ function cleanup(str){
     return str.join("")
 }
 
-function frac(a,b){
-    if(isInt(a/b)){
-        return a/b
-    }else if(a==1){
-        return a+"/"+b
-    }else{
-        return makeFraction(a/b)
-    }
-}
-
-function isInt(x){
-    if(Math.floor(x)==x){
-        return true
-    }else{
-        return false
-    }
-}
-
-function makeFraction(x){
-    let z=Math.floor(x)
-    x=x.toString()
-    x=x.split("")
-    for (let i = 0; i < x.length; i++) {
-        if(x[i]=="."){
-            x.splice(0,i+1)
-            break
-        }
-    }
-    let d=10**x.length
-    let n=x.join("")
-    n=parseFloat(n)+z*d
-    return reduce(n,d)
-}
-
 function reduce(numerator,denominator){
+    if(numerator<0){
+        return "-"+reduce(-numerator,denominator)
+    }
     var gcd = function gcd(a,b){
       return b ? gcd(b, a%b) : a;
     };
     gcd = gcd(numerator,denominator);
     return numerator/gcd+"/"+denominator/gcd
-  }
+}
