@@ -33,7 +33,7 @@ function display(){
         altf=f
         altf=altf.split("")
         for (let i = 0; i < altf.length; i++) {
-            if(altf[i]=="^"){
+            if(altf[i]=="^"&&altf[i+1]!="("){
                 altf[i]="<sup>"
                 altf[i+1]+="</sup>"
             }
@@ -53,7 +53,7 @@ function display(){
 
 function cleanup(str){
     str=str.split("")
-    if(str.length!=1&&str[0]==1&&str[1]!="/"&&str[1]!="."&&isNaN(str[1])){
+    if(str.length!=1&&str[0]==1&&str[1]!="/"&&str[1]!="."&&isNaN(str[1])&&str[1]!=" "&&str[1]!="+"&&str[1]!="-"){
         str.splice(0,1)
     }
     for (let i = 0; i < str.length; i++) {
@@ -107,6 +107,9 @@ function cleanup2(str){
         }
         if(str[i]=="/"&&str[i+1]==1&&isNaN(str[i+2])){
             str.splice(i,2)
+        }
+        if(!isNaN(str[i])&&str[i+1]=="/"&&str[i+2]==1&&isNaN(str[i+3])){
+            str.splice(i+1,2)
         }
     }
     return spacing(str.join(""))
@@ -173,5 +176,5 @@ function reduce(numerator,denominator){
       return b ? gcd(b, a%b) : a
     }
     gcd = gcd(numerator,denominator);
-    return numerator/gcd+"/"+denominator/gcd
+    return cleanup2(numerator/gcd+"/"+denominator/gcd)
 }
